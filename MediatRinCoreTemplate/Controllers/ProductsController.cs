@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static MediatRinCoreTemplate.Handler.Command.ProductCommands;
+using static MediatRinCoreTemplate.Query.GetProductQuery;
 
 namespace MediatRinCoreTemplate.Controllers
 {
@@ -23,7 +25,7 @@ namespace MediatRinCoreTemplate.Controllers
         [HttpGet]
         public async Task<ActionResult> GetProducts()
         {
-            var products = await _mediator.Send(new GetAllProductsQuery());
+            var products = await _mediator.Send(new GetAllProducts());
             return Ok(products);
         }
 
@@ -33,9 +35,17 @@ namespace MediatRinCoreTemplate.Controllers
         {
             Random rnd = new Random();
             var ii = rnd.Next(100);
-            var products = await _mediator.Send(new AddProductCommand(title +" - " + ii, quantity));
+            title += " - " + ii;
+            var productsid = await _mediator.Send(new AddProductCommand(title, quantity));
             await _mediator.Publish(new Notification($"Product Add - {title}"));
-            return Ok( new { id = products.Id });
+            return Created("", new { id = productsid });
+        }
+
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult> GetById(Guid id)
+        {
+            var Product = await _mediator.Send(new GetProductById(id));
+            return Ok(Product);
         }
 
 
