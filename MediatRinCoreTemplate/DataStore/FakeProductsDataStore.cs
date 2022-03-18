@@ -1,5 +1,7 @@
 ﻿using MediatRinCoreTemplate.Model;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace MediatRinCoreTemplate.DataStore
@@ -24,6 +26,11 @@ namespace MediatRinCoreTemplate.DataStore
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
             return await Task.FromResult(_products);
-        } 
+        }
+
+        public async Task<Product> GetById(Guid id)
+        {
+            return await Task.FromResult(_products.Where(x => x.Id == id).FirstOrDefault());
+        }
     }
 }
