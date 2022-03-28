@@ -9,4 +9,5 @@ ENV ASPNETCORE_URLS=http://+:8080
 #COPY --from=publish /app/publish .
 COPY . .
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "MediatRinCoreTemplate.dll"]
+#ENTRYPOINT ["dotnet", "MediatRinCoreTemplate.dll"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
